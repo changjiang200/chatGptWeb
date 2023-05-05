@@ -45,6 +45,11 @@ $(document).ready(function() {
   var chatInput = $('#chatInput');
   var chatWindow = $('#chatWindow');
 
+  if(sessionStorage.getItem('apiKey')){
+    $(".ipt-2").val(sessionStorage.getItem('apiKey'))
+    $(".key .ipt-1").prop("checked",true);
+  }
+
   // 存储对话信息,实现连续对话
   var messages = [];
 
@@ -152,7 +157,7 @@ $(document).ready(function() {
     }
     return str;
   }
-
+  
   // 处理用户输入
   chatBtn.click(function() {
     // 解绑键盘事件
@@ -160,9 +165,9 @@ $(document).ready(function() {
     
     // 保存api key与对话数据
     let data = {
-      "apiKey" : "", // 这里填写固定 apiKey
+      "apiKey" : sessionStorage.getItem('apiKey') || "", // 这里填写固定 apiKey
     }
-   
+    
     // 判断是否使用自己的api key
     if ($(".key .ipt-1").prop("checked")){
       var apiKey = $(".key .ipt-2").val();
@@ -175,6 +180,7 @@ $(document).ready(function() {
           return
       }else{
         data.apiKey = apiKey
+        sessionStorage.setItem('apiKey', apiKey);
       }
 
     }
@@ -227,14 +233,14 @@ $(document).ready(function() {
   chatInput.on("keydown",handleEnter);
   
   // 禁用右键菜单
-  document.addEventListener('contextmenu',function(e){
-    e.preventDefault();  // 阻止默认事件
-  });
+  // document.addEventListener('contextmenu',function(e){
+  //   e.preventDefault();  // 阻止默认事件
+  // });
 
-  // 禁止键盘F12键
-  document.addEventListener('keydown',function(e){
-    if(e.key == 'F12'){
-        e.preventDefault(); // 如果按下键F12,阻止事件
-    }
-  });
+  // // 禁止键盘F12键
+  // document.addEventListener('keydown',function(e){
+  //   if(e.key == 'F12'){
+  //       e.preventDefault(); // 如果按下键F12,阻止事件
+  //   }
+  // });
 });
