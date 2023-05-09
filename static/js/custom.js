@@ -146,7 +146,7 @@ $(document).ready(function() {
         try {
           jsonObj = JSON.parse(line);
         } catch (error) {
-           jsonObj = {error:{type:'01',message:line}}};
+           jsonObj = {error:{type:'01',message:line}};
            console.log(line)
         }
         if (jsonObj.choices && jsonObj.choices[0].delta.content) {
