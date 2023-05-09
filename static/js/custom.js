@@ -142,7 +142,7 @@ $(document).ready(function() {
       const lines = res.trim().split(/[\n]+(?=\{)/);
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
-        const jsonObj = JSON.parse(line);
+        const jsonObj = JSON.parse(line || "{}");
         if (jsonObj.choices && jsonObj.choices[0].delta.content) {
           str += jsonObj.choices[0].delta.content;
           addResponseMessage(str);
