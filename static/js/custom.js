@@ -141,13 +141,23 @@ $(document).ready(function() {
       res = new TextDecoder().decode(value).replace(/^data: /gm, '').replace("[DONE]",'');
       const lines = res.trim().split(/[\n]+(?=\{)/);
       for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        let line = lines[i];
         let jsonObj;
         try {
           jsonObj = JSON.parse(line);
         } catch (error) {
-           jsonObj = {error:{type:'01',message:line}};
-           console.log(line)
+          if (line.indexOf(',\"fini') !== -1) {
+            line = line.substring(0, line.indexOf(',\"fini')) + ',\"finish_reason\":null}]}'; // 替换子字符串
+          }else if (line.indexOf(',\"index\":') !== -1) {
+            line = line.substring(0, line.indexOf(',\"index\":')) + ',\"index\":0,\"finish_reason\":null}]}'; // 替换子字符串
+          }else{
+            console.log(lines)
+            console.log(line)
+            jsonObj = {error:{type:'01',message:line}};
+          }
+          if(!jsonObj){
+            jsonObj = JSON.parse(line);
+          } 
         }
         if (jsonObj.choices && jsonObj.choices[0].delta.content) {
           str += jsonObj.choices[0].delta.content;
